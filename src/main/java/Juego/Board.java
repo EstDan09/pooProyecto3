@@ -59,7 +59,7 @@ public class Board extends JPanel implements ActionListener {
     private GameView theView;
     private static int stage = 1;
     private int numAI;
-    private static final int goal = 1;
+    private static final int goal = 10;
     public static int numEnemies = goal;
     public int numPowerUps = 0;
 
