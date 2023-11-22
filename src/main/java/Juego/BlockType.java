@@ -1,15 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Juego;
 
 /**
+ * Enum class for block on the map
  *
  * @author Esteban
  */
-public enum Blocks {
-    
+public enum BlockType {
+
     /**
      * Enum types for blocks on the map
      */
@@ -23,7 +20,7 @@ public enum Blocks {
      *
      * @param value integer that represents the value of each enum type
      */
-    private Blocks(int value) {
+    private BlockType(int value) {
         this.value = value;
     }
 
@@ -42,8 +39,8 @@ public enum Blocks {
      * @param value an integer value that corresponds each enum type
      * @return BlockType in the game
      */
-    public static Blocks getTypeFromInt(int value) {
-        return Blocks.values()[value];
+    public static BlockType getTypeFromInt(int value) {
+        return BlockType.values()[value];
     }
-    
+
 }

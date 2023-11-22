@@ -1,6 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Spring 2016
+ *
+ * Name: Tongyu Yang, Peter Unrein, Hung Giang, Adrian Berg
+ * Date: Apr 9, 2016
+ * Time: 2:55:46 PM
+ *
+ * Project: csci205FinalProject
+ * Package:
+ * File: GameView
+ * Description:
+ *
+ * ****************************************
  */
 package Juego;
 
@@ -8,15 +19,16 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Esteban
+ * @author Tongyu
  */
-public class Viewer extends javax.swing.JFrame {
+public class GameView extends javax.swing.JFrame {
 
     /**
-     * Creates new form Viewer
+     * Creates new form GameView
      */
-    public Viewer() {
+    public GameView() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -28,30 +40,26 @@ public class Viewer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlGame = new javax.swing.JPanel();
+        gamePanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Battle City");
+        setName("mainFrame"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(512, 470));
 
-        javax.swing.GroupLayout pnlGameLayout = new javax.swing.GroupLayout(pnlGame);
-        pnlGame.setLayout(pnlGameLayout);
-        pnlGameLayout.setHorizontalGroup(
-            pnlGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
-        );
-        pnlGameLayout.setVerticalGroup(
-            pnlGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
-        );
+        gamePanel.setMinimumSize(new java.awt.Dimension(500, 500));
+        gamePanel.setSize(new java.awt.Dimension(528, 448));
+        gamePanel.setLayout(new java.awt.GridLayout(1, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(gamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(gamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -64,7 +72,7 @@ public class Viewer extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -74,30 +82,40 @@ public class Viewer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Viewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GameView.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Viewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GameView.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Viewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GameView.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Viewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GameView.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Viewer().setVisible(true);
+                new GameView().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel pnlGame;
+    private javax.swing.JPanel gamePanel;
     // End of variables declaration//GEN-END:variables
 
-    public JPanel getPnlGame(){
-        return this.pnlGame;
+    /**
+     * Get the game JPanel
+     *
+     * @return gamePanel
+     */
+    public JPanel getGamePanel() {
+        return gamePanel;
     }
 
 }
