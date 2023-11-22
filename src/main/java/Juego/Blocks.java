@@ -5,13 +5,15 @@
 package Juego;
 
 /**
+ * 
+ * Clase
  *
  * @author Esteban
  */
 public enum Blocks {
     
     /**
-     * Enum types for blocks on the map
+     * Enum tipos de bloques en el mapa
      */
     BLANK(0), BRICK(1), STEEL(2), BASE(3), RIVER(4), TREE(5), EDGE(6), TANK(7), STAR(
             8), BOMB(9), CLOCK(10), SHOVEL(11), SHIELD(12);
@@ -19,28 +21,28 @@ public enum Blocks {
     private final int value;
 
     /**
-     * Constructor of the block type
+     * Constructor del tipo de bloque
      *
-     * @param value integer that represents the value of each enum type
+     * @param value integer que representa un enum del tipo de bloque
      */
     private Blocks(int value) {
         this.value = value;
     }
 
     /**
-     * Return integer values that correspond each enum type
+     * Return integer del valor del tipo de bloque
      *
-     * @return an integer value that corresponds each enum type
+     * @return integer del valor del tipo de bloque
      */
     public int getValue() {
         return value;
     }
 
     /**
-     * Return block type given integer value
+     * Return tipo de bloque dado un int
      *
-     * @param value an integer value that corresponds each enum type
-     * @return BlockType in the game
+     * @param value integer para determinar el tipo de bloque que es
+     * @return tipo de bloque
      */
     public static Blocks getTypeFromInt(int value) {
         return Blocks.values()[value];
