@@ -1,119 +1,155 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Juego;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
 /**
- * 
- * Clase que carga todas las imagenes
+ * An class that loads all the images.
  *
  * @author Esteban
  */
 public class ImageManager {
-    
-    private final Image livesIcono;
-    private final Image flagIcono;
-    private final Image enemigoIcono;
-    
-    private final Image flecha;
-    private final Image tanqueBasico;
-    private final Image tanqueRapido;
-    private final Image tanquePoder;
-    private final Image tanqueArmadura;
-    
-    private final Image background;
-    private final Image tanque;
-    private final Image treeAlt;
-    
+    // Instance vairables for the images
+    private final Image lives, flagIcon, enemyIcon;
+    private final Image arrow, tankBasic, tankFast, tankPower, tankArmor;
+    private final Image background, tank, tree2;
     private static ImageManager instance;
-    
-    
+
+    /**
+     * Get the instance of the ImageUtility
+     *
+     * @return instance
+     */
     public static ImageManager getInstance() {
         if (instance == null) {
             return new ImageManager();
         }
         return instance;
     }
-    
-    
+
     private ImageManager() {
-        this.livesIcono = loadImage("imagenes/lives.png");
-        this.flagIcono = loadImage("imagenes/flag.png");
-        this.enemigoIcono = loadImage("imagenes/enemy.png");
-        this.flecha = loadImage("imagenes/arrow.png");
-        this.tanqueBasico = loadImage("imagenes/tank_basic.png");
-        this.tanqueRapido = loadImage("image/tank_fast.png");
-        this.tanquePoder = loadImage("image/tank_power.png");
-        this.tanqueArmadura = loadImage("image/tank_armor.png");
-        this.background = loadImage("image/battle_city.png");
-        this.tanque = loadImage("image/playerTank_right.png");
-        this.treeAlt = loadImage("image/trees2.png");
+        lives = loadImage("image/lives.png");
+        flagIcon = loadImage("image/flag.png");
+        enemyIcon = loadImage("image/enemy.png");
+        arrow = loadImage("image/arrow.png");
+        tankBasic = loadImage("image/tank_basic.png");
+        tankFast = loadImage("image/tank_fast.png");
+        tankPower = loadImage("image/tank_power.png");
+        tankArmor = loadImage("image/tank_armor.png");
+        background = loadImage("image/battle_city.png");
+        tank = loadImage("image/playerTank_right.png");
+        tree2 = loadImage("image/trees2.png");
     }
-    
+
     /**
-     * Cargo una imegen usando una url de path
-     * 
-     * @param urlImagen que es la dirección de la imagen que quiero
-     * @return la iamgen
+     * Load images given the image address
+     *
+     * @param imageAddress image address to the demand image
+     * @return image
      */
-    public Image loadImage (String urlImagen) {
-        ImageIcon icono = new ImageIcon(urlImagen);
-        return icono.getImage();
+    public Image loadImage(String imageAddress) {
+        ImageIcon icon = new ImageIcon(imageAddress);
+        return icon.getImage();
     }
 
-    
-    
+    // Getter for different images
     /**
-     * Getters
-     * @return 
+     * Get lives image
+     *
+     * @return lives
      */
-    
-    public Image getLivesIcono() {
-        return livesIcono;
+    public Image getLives() {
+        return lives;
     }
 
-    public Image getFlagIcono() {
-        return flagIcono;
+    /**
+     * Get flag icon image
+     *
+     * @return flagIcon
+     */
+    public Image getFlagIcon() {
+        return flagIcon;
     }
 
-    public Image getEnemigoIcono() {
-        return enemigoIcono;
+    /**
+     * Get enemy icon image
+     *
+     * @return enemyIcon
+     */
+    public Image getEnemyIcon() {
+        return enemyIcon;
     }
 
-    public Image getFlecha() {
-        return flecha;
+    /**
+     * Get arrow icon image
+     *
+     * @return arrow
+     */
+    public Image getArrow() {
+        return arrow;
     }
 
-    public Image getTanqueBasico() {
-        return tanqueBasico;
+    /**
+     * Get basic tank image
+     *
+     * @return tankBasic
+     */
+    public Image getTankBasic() {
+        return tankBasic;
     }
 
-    public Image getTanqueRapido() {
-        return tanqueRapido;
+    /**
+     * Get fast tank image
+     *
+     * @return Image tankFast
+     */
+    public Image getTankFast() {
+        return tankFast;
     }
 
-    public Image getTanquePoder() {
-        return tanquePoder;
+    /**
+     * Get power tank image
+     *
+     * @return tankPower
+     */
+    public Image getTankPower() {
+        return tankPower;
     }
 
-    public Image getTanqueArmadura() {
-        return tanqueArmadura;
+    /**
+     * Get armor tank image
+     *
+     * @return tankArmor
+     */
+    public Image getTankArmor() {
+        return tankArmor;
     }
 
+    /**
+     * Get background image for the menu
+     *
+     * @return background
+     */
     public Image getBackground() {
         return background;
     }
 
-    public Image getTanque() {
-        return tanque;
+    /**
+     * Get tree image for the menu
+     *
+     * @return tree2
+     */
+    public Image getTree2() {
+        return tree2;
     }
 
-    public Image getTreeAlt() {
-        return treeAlt;
+    /**
+     * Get tank image for the menu
+     *
+     * @return tank Image
+     */
+    public Image getTank() {
+        return tank;
     }
-    
+
 }
