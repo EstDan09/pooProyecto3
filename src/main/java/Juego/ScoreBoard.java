@@ -1,6 +1,7 @@
 package Juego;
 
 import static Juego.Menu.loadFont;
+import Patrones.IObserver;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -19,8 +20,7 @@ import javax.swing.JPanel;
  *
  * @author Esteban
  */
-public class ScoreBoard extends JPanel implements ActionListener, KeyListener {
-
+public class ScoreBoard extends JPanel implements ActionListener, KeyListener, IObserver {
     /**
      * Initialize instance variables for the ScoreBoard
      */
@@ -50,7 +50,7 @@ public class ScoreBoard extends JPanel implements ActionListener, KeyListener {
         this.add(restartButton);
         restartButton.setBounds(400, 400,
                                 100, 30);
-        restartButton.addActionListener(this);
+        restartButton.addActionListener(this); 
     }
 
     /**
@@ -113,8 +113,8 @@ public class ScoreBoard extends JPanel implements ActionListener, KeyListener {
      */
     public void loadScore() {
         for (int i = 0; i < 4; i++) {
-            int[] enemyTankNum = CollisionUtility.getEnemyTankNum();
-            tankNumList[i] = enemyTankNum[i];
+            CollisionUtility cu = CollisionUtility.getInstance();
+            cu.notifyAllObservers("AumentoEnemyTank", CollisionUtility.getEnemyTankNum());
         }
         for (int i = 0; i < 4; i++) {
             tankScoreList[i] = tankNumList[i] * 100 * (i + 1);
@@ -175,6 +175,17 @@ public class ScoreBoard extends JPanel implements ActionListener, KeyListener {
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             loadMenu();
+        }
+    }
+
+    @Override
+    public void notifyObserver(String command, Object source) {
+        if ("AumentoEnemyTank".equals(command) && source instanceof int[]) {
+            int[] newTankNumList = (int[]) source;
+            tankNumList = newTankNumList;
+            System.out.println(tankNumList);
+//            loadScore();
+//            repaint();
         }
     }
 }

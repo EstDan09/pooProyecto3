@@ -3,6 +3,9 @@ package SpriteClasses;
 import Juego.CollisionUtility;
 import Juego.Map;
 import Juego.SoundUtility;
+import Patrones.Command;
+import Patrones.DispararCommand;
+import Patrones.MoverseCommand;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -27,8 +30,13 @@ public class Tank extends Sprite {
 
     private final int BOARD_WIDTH = Map.BOARD_WIDTH;
     private final int BOARD_HEIGHT = Map.BOARD_HEIGHT;
+    
+    private Command moverse;
+    private Command disparar;
+    
     private int dx;
     private int dy;
+    
     private ArrayList<Bullet> bullets;
     public int direction;
     private long lastFired = 0;
@@ -66,8 +74,54 @@ public class Tank extends Sprite {
         bullets = new ArrayList<>();
         direction = 0;
         this.lives = lives;
+        moverse = new MoverseCommand(this);
+        disparar = new DispararCommand(this);
+    }
+    
+    public void ejecutarMovimiento(KeyEvent e) {
+        moverse.execute(e);
     }
 
+    public void ejecutarDisparo(KeyEvent e) {
+        disparar.execute(e);
+    }
+
+    public void keyPressed(KeyEvent e) {
+        ejecutarMovimiento(e);
+        ejecutarDisparo(e);
+    }
+    
+    public ArrayList<Bullet> getBullets() {
+
+        return bullets;
+    }
+
+    public void setLastFired(long lastFired) {
+        this.lastFired = lastFired;
+    }
+
+    public long getLastFired() {
+        return lastFired;
+    }
+    
+    public void fire() {
+        Bullet aBullet;
+        if (direction == 0) {
+            aBullet = new Bullet(x + width / 3, y, 0, false);
+        } else if (direction == 1) {
+            aBullet = new Bullet(x + width - 3, y + height / 3, 1, false);
+        } else if (direction == 2) {
+            aBullet = new Bullet(x + width / 3, (y + height) - 3, 2, false);
+        } else {
+            aBullet = new Bullet(x, y + height / 3, 3, false);
+        }
+        if (starLevel == 3) {
+            aBullet.upgrade();
+        }
+        bullets.add(aBullet);
+        SoundUtility.fireSound();
+    }
+    
     public void move() {
 
         Rectangle theTank = new Rectangle(x + dx, y + dy, width, height);
@@ -93,29 +147,6 @@ public class Tank extends Sprite {
         }
     }
 
-    public ArrayList<Bullet> getBullets() {
-
-        return bullets;
-    }
-
-    public void fire() {
-        Bullet aBullet;
-        if (direction == 0) {
-            aBullet = new Bullet(x + width / 3, y, 0, false);
-        } else if (direction == 1) {
-            aBullet = new Bullet(x + width - 3, y + height / 3, 1, false);
-        } else if (direction == 2) {
-            aBullet = new Bullet(x + width / 3, (y + height) - 3, 2, false);
-        } else {
-            aBullet = new Bullet(x, y + height / 3, 3, false);
-        }
-        if (starLevel == 3) {
-            aBullet.upgrade();
-        }
-        bullets.add(aBullet);
-        SoundUtility.fireSound();
-    }
-
     public int getX() {
         return x;
     }
@@ -128,56 +159,14 @@ public class Tank extends Sprite {
         return image;
     }
 
-    public void keyPressed(KeyEvent e) {
-        int time;
-        int key = e.getKeyCode();
-        if (starLevel == 0) {
-            time = 700;
-        } else {
-            time = 250;
-        }
-        if (key == KeyEvent.VK_SPACE && (System.currentTimeMillis() - lastFired) > time) {
-            fire();
-            lastFired = System.currentTimeMillis();
-        } else if (key == KeyEvent.VK_LEFT) {
-            dx = -1;
-            dy = 0;
-            if (starLevel > 1) {
-                dx = -2;
-            }
-            ImageIcon ii = new ImageIcon("image/playerTank_left.png");
-            image = ii.getImage();
-            direction = 3;
-        } else if (key == KeyEvent.VK_RIGHT) {
-            dx = 1;
-            dy = 0;
-            if (starLevel > 1) {
-                dx = 2;
-            }
-            ImageIcon ii = new ImageIcon("image/playerTank_right.png");
-            image = ii.getImage();
-            direction = 1;
-        } else if (key == KeyEvent.VK_UP) {
-            ImageIcon ii = new ImageIcon("image/playerTank_up.png");
-            image = ii.getImage();
-            dy = -1;
-            dx = 0;
-            if (starLevel > 1) {
-                dy = -2;
-            }
-            direction = 0;
-        } else if (key == KeyEvent.VK_DOWN) {
-            ImageIcon ii = new ImageIcon("image/playerTank_down.png");
-            image = ii.getImage();
-            dy = 1;
-            dx = 0;
-            if (starLevel > 1) {
-                dy = 2;
-            }
-            direction = 2;
-        }
+    public void setImage(Image image) {
+        this.image = image;
     }
 
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+        
     public void keyReleased(KeyEvent e) {
 
         int key = e.getKeyCode();
@@ -206,4 +195,13 @@ public class Tank extends Sprite {
     public int getStarLevel() {
         return starLevel;
     }
+
+    public void setDx(int dx) {
+        this.dx = dx;
+    }
+
+    public void setDy(int dy) {
+        this.dy = dy;
+    }
 }
+

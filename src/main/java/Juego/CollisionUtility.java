@@ -1,20 +1,6 @@
-/* *****************************************
- * CSCI205 - Software Engineering and Design
- * Spring 2016
- *
- * Name: Tongyu Yang, Peter Unrein, Hung Giang
- * Date: Apr 16, 2016
- * Time: 11:42:27 PM
- *
- * Project: csci205FinalProject
- * Package: GameMain
- * File: CollisionUtility
- * Description: Utility class for collision detection and handling
- *
- * ****************************************
- */
 package Juego;
 
+import Patrones.AbstractObservable;
 import SpriteClasses.Animation;
 import SpriteClasses.Base;
 import SpriteClasses.Block;
@@ -30,9 +16,9 @@ import java.util.ArrayList;
 /**
  * Utility class for collision detection and handling
  *
- * @author Adrian Berg
+ * @author Esteban
  */
-public class CollisionUtility {
+public class CollisionUtility extends AbstractObservable{
     // Instance variable that indicated the x, y coordinates of the powerUp
     public static int powerUpX = 0;
     public static int powerUpY = 0;
@@ -40,6 +26,17 @@ public class CollisionUtility {
     private static ArrayList<Animation> explosions;
     // Instance variable that tracks the number of enemy tanks being destroyed
     private static int[] enemyTankNum = {0, 0, 0, 0};
+    private static CollisionUtility instancia; 
+    
+    private CollisionUtility(){}
+    
+    public static CollisionUtility getInstance() {           
+        if (instancia == null) {               
+            instancia = new CollisionUtility();  
+        }
+                
+            return instancia;       
+    }   
 
     /**
      * Load blocks and explosion animation from the input array list
@@ -212,6 +209,7 @@ public class CollisionUtility {
      *
      * @param tankAI a given tankAI
      */
+    // observer
     public static void incrementNum(TankAI tankAI) {
         String type = tankAI.getType();
         switch (type) {
@@ -229,7 +227,7 @@ public class CollisionUtility {
                 break;
             default:
                 break;
-        }
+        } 
     }
 
     /**

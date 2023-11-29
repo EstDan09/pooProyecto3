@@ -1,25 +1,10 @@
-/* *****************************************
- * CSCI205 - Software Engineering and Design
- * Spring 2016
- *
- * Name: Tongyu Yang, Peter Unrein, Hung Giang, Adrian Berg
- * Date: Apr 9, 2016
- * Time: 2:55:46 PM
- *
- * Project: csci205FinalProject
- * Package:
- * File: GameView
- * Description:
- *
- * ****************************************
- */
 package Juego;
 
 import javax.swing.JPanel;
 
 /**
  *
- * @author Tongyu
+ * @author Esteban
  */
 public class GameView extends javax.swing.JFrame {
 
@@ -48,7 +33,6 @@ public class GameView extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(512, 470));
 
         gamePanel.setMinimumSize(new java.awt.Dimension(500, 500));
-        gamePanel.setSize(new java.awt.Dimension(528, 448));
         gamePanel.setLayout(new java.awt.GridLayout(1, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

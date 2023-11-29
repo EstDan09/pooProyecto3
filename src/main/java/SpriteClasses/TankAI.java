@@ -2,6 +2,8 @@ package SpriteClasses;
 
 import Juego.CollisionUtility;
 import Juego.Map;
+import Patrones.IPrototype;
+import Patrones.ITanquesEnemigos;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import javax.swing.ImageIcon;
  * @param boolean powerUp indicates if the AI will give player powerUp or not
  * @author Esteban
  */
-public class TankAI extends Sprite {
+public class TankAI extends Sprite implements ITanquesEnemigos<TankAI>, IPrototype<TankAI>{
     private final int BOARD_WIDTH = Map.BOARD_WIDTH;
     private final int BOARD_HEIGHT = Map.BOARD_HEIGHT;
     private ArrayList<Bullet> bullets;
@@ -42,8 +44,58 @@ public class TankAI extends Sprite {
     private String imageDown;
     private String imageLeft;
     private String imageRight;
+    
+    private static final int BASIC_HEALTH = 1;
+    private static final double BASIC_SPEED_CONST = 1;
+    private static final int BASIC_DIR_UPDATE_INTERVAL = 30;
+    private static final int BASIC_FIRE_UPDATE_INTERVAL = 80;
 
-    public TankAI(int x, int y, String difficulty, String type, boolean powerUp) {
+    private static final int ARMOR_HEALTH = 4;
+    private static final double ARMOR_SPEED_CONST = 1;
+    private static final int ARMOR_DIR_UPDATE_INTERVAL = 30;
+    private static final int ARMOR_FIRE_UPDATE_INTERVAL = 80;
+
+    private static final int POWER_HEALTH = 1;
+    private static final double POWER_SPEED_CONST = 1;
+    private static final int POWER_DIR_UPDATE_INTERVAL = 30;
+    private static final int POWER_FIRE_UPDATE_INTERVAL = 40;
+
+    private static final int FAST_HEALTH = 1;
+    private static final double FAST_SPEED_CONST = 2;
+    private static final int FAST_DIR_UPDATE_INTERVAL = 30;
+    private static final int FAST_FIRE_UPDATE_INTERVAL = 80;
+    
+    private static final String BASIC_UP_IMAGE = "image/tank_basic_up.png";
+    private static final String BASIC_DOWN_IMAGE = "image/tank_basic_down.png";
+    private static final String BASIC_LEFT_IMAGE = "image/tank_basic_left.png";
+    private static final String BASIC_RIGHT_IMAGE = "image/tank_basic_right.png";
+
+    private static final String ARMOR_UP_IMAGE = "image/tank_armor_up.png";
+    private static final String ARMOR_DOWN_IMAGE = "image/tank_armor_down.png";
+    private static final String ARMOR_LEFT_IMAGE = "image/tank_armor_left.png";
+    private static final String ARMOR_RIGHT_IMAGE = "image/tank_armor_right.png";
+
+    private static final String POWER_UP_IMAGE = "image/tank_power_up.png";
+    private static final String POWER_DOWN_IMAGE = "image/tank_power_down.png";
+    private static final String POWER_LEFT_IMAGE = "image/tank_power_left.png";
+    private static final String POWER_RIGHT_IMAGE = "image/tank_power_right.png";
+
+    private static final String FAST_UP_IMAGE = "image/tank_fast_up.png";
+    private static final String FAST_DOWN_IMAGE = "image/tank_fast_down.png";
+    private static final String FAST_LEFT_IMAGE = "image/tank_fast_left.png";
+    private static final String FAST_RIGHT_IMAGE = "image/tank_fast_right.png";
+    
+    private static TankAI singletonInstance;
+
+    public static TankAI getInstance(int x, int y, String difficulty, String type, boolean powerUp) {
+        if (singletonInstance == null) {
+            singletonInstance = new TankAI(x, y, difficulty, type, powerUp);
+        }
+        return singletonInstance;
+    }
+
+    
+    private TankAI(int x, int y, String difficulty, String type, boolean powerUp) {
         super(x, y);
         bullets = new ArrayList<>();
         direction = 0;
@@ -53,6 +105,27 @@ public class TankAI extends Sprite {
         this.type = type;
         this.setUp();
         this.imageSetUp();
+    }
+    
+    @Override
+    public TankAI clone(){
+        try {
+            TankAI clone = (TankAI) super.clone();
+            clone.setX(this.getX());
+            clone.setY(this.getY());
+            clone.setBullets(new ArrayList<>(this.bullets));
+            clone.setDirection(this.direction);
+            clone.setVis(this.vis);
+            clone.setPowerUp(this.powerUp);
+            clone.setDifficulty(this.difficulty);
+            clone.setType(this.type);
+            clone.setUp();
+            clone.imageSetUp();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -116,6 +189,63 @@ public class TankAI extends Sprite {
             }
         }
     }
+    
+    public static void setUp(TankAI tank) {
+        if ("basic".equals(tank.type)) {
+            tank.health = BASIC_HEALTH;
+            tank.speedConst = BASIC_SPEED_CONST;
+            tank.dirUpdateInterval = BASIC_DIR_UPDATE_INTERVAL;
+            tank.fireUpdateInterval = BASIC_FIRE_UPDATE_INTERVAL;
+        } else if ("armor".equals(tank.type)) {
+            tank.health = ARMOR_HEALTH;
+            tank.speedConst = ARMOR_SPEED_CONST;
+            tank.dirUpdateInterval = ARMOR_DIR_UPDATE_INTERVAL;
+            tank.fireUpdateInterval = ARMOR_FIRE_UPDATE_INTERVAL;
+        } else if ("power".equals(tank.type)) {
+            tank.health = POWER_HEALTH;
+            tank.speedConst = POWER_SPEED_CONST;
+            tank.dirUpdateInterval = POWER_DIR_UPDATE_INTERVAL;
+            tank.fireUpdateInterval = POWER_FIRE_UPDATE_INTERVAL;
+        } else if ("fast".equals(tank.type)) {
+            tank.health = FAST_HEALTH;
+            tank.speedConst = FAST_SPEED_CONST;
+            tank.dirUpdateInterval = FAST_DIR_UPDATE_INTERVAL;
+            tank.fireUpdateInterval = FAST_FIRE_UPDATE_INTERVAL;
+        }
+    }
+    
+    public static void imageSetUp(TankAI tank) {
+        if ("basic".equals(tank.type)) {
+            tank.loadImage(BASIC_UP_IMAGE);
+            tank.getImageDimensions();
+            tank.imageUp = BASIC_UP_IMAGE;
+            tank.imageDown = BASIC_DOWN_IMAGE;
+            tank.imageLeft = BASIC_LEFT_IMAGE;
+            tank.imageRight = BASIC_RIGHT_IMAGE;
+        } else if ("armor".equals(tank.type)) {
+            tank.loadImage(ARMOR_UP_IMAGE);
+            tank.getImageDimensions();
+            tank.imageUp = ARMOR_UP_IMAGE;
+            tank.imageDown = ARMOR_DOWN_IMAGE;
+            tank.imageLeft = ARMOR_LEFT_IMAGE;
+            tank.imageRight = ARMOR_RIGHT_IMAGE;
+        } else if ("power".equals(tank.type)) {
+            tank.loadImage(POWER_UP_IMAGE);
+            tank.getImageDimensions();
+            tank.imageUp = POWER_UP_IMAGE;
+            tank.imageDown = POWER_DOWN_IMAGE;
+            tank.imageLeft = POWER_LEFT_IMAGE;
+            tank.imageRight = POWER_RIGHT_IMAGE;
+        } else if ("fast".equals(tank.type)) {
+            tank.loadImage(FAST_UP_IMAGE);
+            tank.getImageDimensions();
+            tank.imageUp = FAST_UP_IMAGE;
+            tank.imageDown = FAST_DOWN_IMAGE;
+            tank.imageLeft = FAST_LEFT_IMAGE;
+            tank.imageRight = FAST_RIGHT_IMAGE;
+        }
+    }
+
 
     /**
      * imageSetUp() is a helper function. It will handle setting up the image
@@ -165,6 +295,14 @@ public class TankAI extends Sprite {
         return y;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    
     @Override
     public Image getImage() {
         return image;
@@ -437,6 +575,30 @@ public class TankAI extends Sprite {
         }
     }
 
+    public void setBullets(ArrayList<Bullet> bullets) {
+        this.bullets = bullets;
+    }
+
+    public void setPowerUp(boolean powerUp) {
+        this.powerUp = powerUp;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setVis(boolean vis) {
+        this.vis = vis;
+    }
+    
     /**
      * Get the type of the Enemy tank
      *

@@ -26,6 +26,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -197,6 +199,7 @@ public class Board extends JPanel implements ActionListener {
      */
     private void drawEdge(Graphics g) {
         // Draw enemies
+        //observer
         drawEnemies(g, numEnemies);
 
         // Draw lives
@@ -251,13 +254,14 @@ public class Board extends JPanel implements ActionListener {
      * @param num numeor de enemigos que voy a eliminar
      */
     public static void decrementEnemies(int num) {
+        //observer
         numEnemies -= num;
     }
 
     /**
      * UpdatesSprites is used to call the various update calls.
      */
-    public void updateSprites() {
+    public void updateSprites() throws CloneNotSupportedException {
         spawnTankAI();
         spawnPowerUp();
         updateTank();
@@ -279,18 +283,26 @@ public class Board extends JPanel implements ActionListener {
             timer.stop();
             return;
         }
-        updateSprites();
+        try {
+            updateSprites();
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+        }
         checkCollisions();
         checkGameOver();
 
-        nextLevel();
+        try {
+            nextLevel();
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+        }
         repaint();
     }
 
     /**
      * Call initBoard to enter next Level when no enemy in the list.
      */
-    public void nextLevel() {
+    public void nextLevel() throws CloneNotSupportedException {
         if (enemy.isEmpty()) {
             if (stage == 35) {
                 System.out.println("You win!");
@@ -368,7 +380,7 @@ public class Board extends JPanel implements ActionListener {
     /**
      * Spawn tank AI to reach the goal.
      */
-    private void spawnTankAI() {
+    private void spawnTankAI() throws CloneNotSupportedException {
         while (numAI < goal) {
             if (enemy.size() < 4) {
                 boolean powerUp;
@@ -465,7 +477,8 @@ public class Board extends JPanel implements ActionListener {
             g.setFont(font);
             g.setColor(Color.RED);
             g.drawString("GAME OVER", Map.BOARD_WIDTH / 2 - 85, yPos);
-
+            
+            // aaaaa
             if (yPos == stopYPos) {
                 gameOverTimer.stop();
                 Timer sorceBoardTimer = new Timer(3000, new ActionListener() {
@@ -490,6 +503,10 @@ public class Board extends JPanel implements ActionListener {
         theView.getGamePanel().removeAll();
         ScoreBoard scoreBoard = new ScoreBoard(theView);
         scoreBoard.setBackground(Color.BLACK);
+        
+        CollisionUtility cu = CollisionUtility.getInstance();
+        cu.addObserver(scoreBoard);
+
         theView.getGamePanel().add(scoreBoard);
         scoreBoard.requestFocusInWindow();
         SoundUtility.statistics();
@@ -515,7 +532,7 @@ public class Board extends JPanel implements ActionListener {
     /**
      * Clear the initialized variables on the board.
      */
-    public void clearBoard() {
+    public void clearBoard() throws CloneNotSupportedException {
 
         animations = new ArrayList<>();
         blocks = new ArrayList<>();

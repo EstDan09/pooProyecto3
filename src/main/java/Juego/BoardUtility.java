@@ -1,5 +1,13 @@
 package Juego;
 
+import Patrones.Bomba;
+import Patrones.Casco;
+import Patrones.ComodinManager;
+import Patrones.Estrella;
+import Patrones.IEstrategia;
+import Patrones.Pala;
+import Patrones.Reloj;
+import Patrones.Tanque;
 import SpriteClasses.Animation;
 import SpriteClasses.Block;
 import SpriteClasses.Bullet;
@@ -8,6 +16,7 @@ import SpriteClasses.PowerUps.BombPowerUp;
 import SpriteClasses.PowerUps.ClockPowerUp;
 import SpriteClasses.PowerUps.PowerUp;
 import SpriteClasses.PowerUps.ShieldPowerUp;
+import SpriteClasses.PowerUps.ShovelPowerUp;
 import SpriteClasses.PowerUps.StarPowerUp;
 import SpriteClasses.PowerUps.TankPowerUp;
 import SpriteClasses.Tank;
@@ -51,9 +60,14 @@ public class BoardUtility {
         tank = tank1;
     }
 
+    public static ArrayList<Block> getBlocks() {
+        return blocks;
+    }
+
     /**
      * Update power ups on the board.
      */
+    // strategy
     public static void updatePowerUps() {
         for (int i = 0; i < powerUps.size(); i++) {
             PowerUp p = powerUps.get(i);
@@ -69,31 +83,28 @@ public class BoardUtility {
             if (r1.intersects(r2)) {
                 powerUps.remove(i);
                 SoundUtility.powerupPick();
+                IEstrategia estrategia = null;
                 if (type.equals(BlockType.TANK)) {
-                    tank.upHealth();
+                    estrategia = new Tanque();
+                    
                 } else if (type.equals(BlockType.SHIELD)) {
-                    tank.shield = true;
-                    animations.add(new TankShield(tank, 1));
+                    estrategia = new Casco();
+                    
                 } else if (type.equals(BlockType.SHOVEL)) {
-
+                    estrategia = new Pala();
+                    
                 } else if (type.equals(BlockType.STAR)) {
-                    tank.upStarLevel();
+                    estrategia = new Estrella();
+                    
                 } else if (type.equals(BlockType.CLOCK)) {
-                    for (int x = 0; x < enemy.size(); x++) {
-                        enemy.get(x).frozen = true;
-                        enemy.get(x).frozenStartTime = System.currentTimeMillis();
-                    }
+                    estrategia = new Reloj();
+                    
                 } else if (type.equals(BlockType.BOMB)) {
-                    for (int x = 0; x < enemy.size(); x++) {
-                        enemy.get(x).vis = false;
-                        for (TankAI ai : enemy) {
-                            CollisionUtility.incrementNum(ai);
-                        }
-                        Board.decrementEnemies(enemy.size());
-                        animations.add(new ExplodingTank(enemy.get(x).x,
-                                                         enemy.get(x).y));
-                    }
+                    estrategia = new Bomba();
                 }
+                ComodinManager powerUPManager = new ComodinManager();
+                powerUPManager.setEstrategia(estrategia);
+                powerUPManager.aplicarPowerUp(tank, enemy, animations);
             }
         }
 
@@ -105,7 +116,7 @@ public class BoardUtility {
      */
     public static void spawnPowerUp() {
         Random random = new Random();
-        int randomPow = random.nextInt(5);
+        int randomPow = random.nextInt(6);
         if (CollisionUtility.powerUpX != 0 || CollisionUtility.powerUpY != 0) {
             switch (randomPow) {
                 case 0:
@@ -128,6 +139,10 @@ public class BoardUtility {
                     powerUps.add(new TankPowerUp(CollisionUtility.powerUpX,
                                                  CollisionUtility.powerUpY));
                     break;
+                case 5:
+                    powerUps.add(new ShovelPowerUp(CollisionUtility.powerUpX,
+                                                 CollisionUtility.powerUpY));
+                    break;
                 default:
                     break;
             }
@@ -142,7 +157,9 @@ public class BoardUtility {
      * @param difficulty a string that represents the difficulty of the tank AI
      * @param powerUp a boolean that represents if the tank AI carries powerUp
      */
-    public static void spawnTankAI(String difficulty, boolean powerUp) {
+    
+    // Prototype
+    public static void spawnTankAI(String difficulty, boolean powerUp) throws CloneNotSupportedException {
         Random random = new Random();
         int randomPos = random.nextInt(3);
         int randomType = random.nextInt(20);
@@ -158,16 +175,40 @@ public class BoardUtility {
         }
         if (randomPos == 0) {
             animations.add(new TankSpawn(2 * 16, 1 * 16));
-            TankAI AI = new TankAI(2 * 16, 1 * 16, difficulty, type, powerUp);
-            enemy.add(AI);
+            TankAI prototypeAI = TankAI.getInstance(2 * 16, 1 * 16, difficulty, type, powerUp);
+            TankAI clonedAI = prototypeAI.clone();
+            clonedAI.setType(type);
+            clonedAI.setDifficulty(difficulty);
+            clonedAI.setPowerUp(powerUp);
+            clonedAI.setX(2 * 16);
+            clonedAI.setY(1 * 16); 
+            clonedAI.setUp(clonedAI);
+            clonedAI.imageSetUp(clonedAI);
+            enemy.add(clonedAI);
         } else if (randomPos == 1) {
             animations.add(new TankSpawn(14 * 16, 1 * 16));
-            TankAI AI = new TankAI(14 * 16, 1 * 16, difficulty, type, powerUp);
-            enemy.add(AI);
+            TankAI prototypeAI = TankAI.getInstance(14 * 16, 1 * 16, difficulty, type, powerUp);
+            TankAI clonedAI = prototypeAI.clone();
+            clonedAI.setType(type);
+            clonedAI.setDifficulty(difficulty);
+            clonedAI.setPowerUp(powerUp);
+            clonedAI.setX(14 * 16);
+            clonedAI.setY(1 * 16); 
+            clonedAI.setUp(clonedAI);
+            clonedAI.imageSetUp(clonedAI);
+            enemy.add(clonedAI);
         } else {
             animations.add(new TankSpawn(26 * 16, 1 * 16));
-            TankAI AI = new TankAI(26 * 16, 1 * 16, difficulty, type, powerUp);
-            enemy.add(AI);
+            TankAI prototypeAI = TankAI.getInstance(26 * 16, 1 * 16, difficulty, type, powerUp);
+            TankAI clonedAI = prototypeAI.clone();
+            clonedAI.setType(type);
+            clonedAI.setDifficulty(difficulty);
+            clonedAI.setPowerUp(powerUp);
+            clonedAI.setX(26 * 16);
+            clonedAI.setY(1 * 16);
+            clonedAI.setUp(clonedAI);
+            clonedAI.imageSetUp(clonedAI);
+            enemy.add(clonedAI);
         }
     }
 
